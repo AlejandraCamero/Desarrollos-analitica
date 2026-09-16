@@ -318,10 +318,13 @@ export default function Matrix({
     window.addEventListener("laft_params_updated", handleStorageChange);
     window.addEventListener("focus", handleStorageChange);
 
+    const intervalo = setInterval(() => recargarParametros(), 1500);
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("laft_params_updated", handleStorageChange);
       window.removeEventListener("focus", handleStorageChange);
+      clearInterval(intervalo);
     };
   }, [recargarParametros]);
 
