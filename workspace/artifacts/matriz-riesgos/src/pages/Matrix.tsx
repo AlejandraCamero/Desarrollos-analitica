@@ -984,38 +984,36 @@ export default function Matrix({
             </span>
           </div>
 
-          <div className="max-h-60 overflow-y-auto border border-slate-200 rounded-lg p-2 space-y-2 text-xs bg-slate-50/50">
-            {controles.map((ctrl) => {
-              const isSelected = formControlCodigos.includes(ctrl.codigo);
-              const pond = calcularPonderacion(ctrl.clase, ctrl.tipo, ctrl.frecuencia, ctrl.formalidad);
-              return (
-                <div
-                  key={ctrl.id || ctrl.codigo}
-                  onClick={() => toggleControlInForm(ctrl.codigo)}
-                  className={`p-3 rounded-lg border transition-all cursor-pointer flex items-start gap-3 ${
-                    isSelected
-                      ? "bg-teal-50 border-teal-300 shadow-xs"
-                      : "bg-white border-slate-200 hover:border-slate-300"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => {}}
-                    className="mt-0.5 rounded text-teal-600 focus:ring-teal-500 w-4 h-4"
-                  />
-                  <div className="flex-1">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-bold text-slate-900">{ctrl.codigo} - {ctrl.control}</span>
-                      <span className="font-semibold text-teal-700 bg-teal-100/60 px-2 py-0.5 rounded text-[10px]">
-                        Eficiencia: {pond}%
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-600 leading-tight">{ctrl.descripcion}</p>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="space-y-3 text-xs">
+            <select
+              multiple
+              value={formControlCodigos}
+              onChange={(e) => {
+                const seleccionados = Array.from(e.target.selectedOptions).map(o => o.value);
+                setFormControlCodigos(seleccionados);
+              }}
+              className="w-full border border-slate-300 rounded-lg bg-white focus:ring-1 focus:ring-teal-600 focus:border-teal-600 text-xs"
+              size={6}
+            >
+              {controles.map((ctrl) => {
+                const pond = calcularPonderacion(ctrl.clase, ctrl.tipo, ctrl.frecuencia, ctrl.formalidad);
+                return (
+                  <option key={ctrl.id || ctrl.codigo} value={ctrl.codigo} className="p-2 border-b border-slate-100">
+                    {ctrl.codigo} - {ctrl.control} | Eficiencia: {pond}%
+                  </option>
+                );
+              })}
+            </select>
+            <p className="text-[11px] text-slate-400 italic">Mantén Ctrl presionado para seleccionar varios controles.</p>
+            {formControlCodigos.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1">
+                {formControlCodigos.map((codigo) => (
+                  <span key={codigo} className="px-2 py-0.5 bg-teal-50 text-teal-800 border border-teal-200 rounded text-[10px] font-medium">
+                    {codigo}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
