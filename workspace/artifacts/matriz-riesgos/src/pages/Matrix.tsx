@@ -378,6 +378,8 @@ export default function Matrix({
   useEffect(() => {
     try {
       localStorage.setItem("laft_matriz_riesgos_v3", JSON.stringify(riesgos));
+      window.dispatchEvent(new Event("laft-data-updated"));
+      window.dispatchEvent(new Event("laft_params_updated"));
     } catch (e) {
       console.error("Error al guardar en localStorage:", e);
     }
@@ -480,10 +482,7 @@ export default function Matrix({
   };
 
   const handleReset = () => {
-    if (confirm("¿Desea restablecer los riesgos iniciales de la matriz?")) {
-      setRiesgos(riesgosProp || RIESGOS_INICIALES);
-      localStorage.removeItem("laft_matriz_riesgos_v3");
-    }
+    window.location.reload();
   };
 
   const toggleControlInForm = (codigo: string) => {
@@ -1091,7 +1090,7 @@ export default function Matrix({
           <button
             onClick={handleReset}
             className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors"
-            title="Restablecer a valores iniciales"
+            title="Refrescar información"
           >
             <RotateCcw className="w-4 h-4" />
           </button>

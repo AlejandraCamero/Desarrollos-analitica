@@ -278,11 +278,7 @@ export default function Events() {
   };
 
   const handleResetCache = () => {
-    if (confirm("¿Desea restablecer los eventos almacenados para corregir problemas de caché?")) {
-      localStorage.removeItem("laft_eventos_v2");
-      setEventos([]);
-      window.location.reload();
-    }
+    window.location.reload();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -312,11 +308,11 @@ export default function Events() {
         <div className="flex items-center gap-2">
           <button
             onClick={handleResetCache}
-            title="Limpiar datos locales"
+            title="Refrescar información"
             className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            Restablecer
+            Refrescar
           </button>
           <button
             onClick={handleOpenModal}

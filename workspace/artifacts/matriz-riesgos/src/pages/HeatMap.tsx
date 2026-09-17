@@ -88,12 +88,19 @@ export default function Heatmap() {
     cargarDatos();
     window.addEventListener("storage", cargarDatos);
     window.addEventListener("laft-data-updated", cargarDatos);
+    window.addEventListener("laft_params_updated", cargarDatos);
+    window.addEventListener("laft_parametros_updated", cargarDatos);
     window.addEventListener("focus", cargarDatos);
+
+    const intervalo = setInterval(() => cargarDatos(), 1500);
 
     return () => {
       window.removeEventListener("storage", cargarDatos);
       window.removeEventListener("laft-data-updated", cargarDatos);
+      window.removeEventListener("laft_params_updated", cargarDatos);
+      window.removeEventListener("laft_parametros_updated", cargarDatos);
       window.removeEventListener("focus", cargarDatos);
+      clearInterval(intervalo);
     };
   }, [cargarDatos]);
 
