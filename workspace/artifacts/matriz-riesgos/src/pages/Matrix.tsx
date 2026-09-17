@@ -394,7 +394,11 @@ export default function Matrix({
     setListaSubprocesos(subprocesos);
     setListaFactores(factores);
 
-    const nextNum = riesgos.length + 1;
+    const numeros = riesgos
+      .map(r => parseInt(r.codigo?.replace("RIE-LAFT-", "") || "0"))
+      .filter(n => !isNaN(n));
+    const maxNum = numeros.length > 0 ? Math.max(...numeros) : 0;
+    const nextNum = maxNum + 1;
     const nextCode = `RIE-LAFT-${nextNum < 10 ? "0" + nextNum : nextNum}`;
     
     setFormData({
@@ -452,10 +456,7 @@ export default function Matrix({
 
   const handleSaveRiesgo = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.codigo) {
-      alert("Por favor ingrese el código del riesgo.");
-      return;
-    }
+    
 
     const payload = {
       ...formData,
@@ -702,13 +703,12 @@ export default function Matrix({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div>
-              <label className="block font-medium text-slate-700 mb-1">Código *</label>
+              <label className="block font-medium text-slate-700 mb-1">Código</label>
               <input
                 type="text"
                 value={formData.codigo}
-                onChange={(e) => setFormData({ ...formData, codigo: e.target.value })}
-                placeholder="Ej. RIE-LAFT-01"
-                className="w-full p-2.5 border border-slate-300 rounded-md bg-white focus:ring-1 focus:ring-teal-600 focus:border-teal-600 font-bold text-slate-900"
+                readOnly
+                className="w-full p-2.5 border border-slate-200 rounded-md bg-slate-100 font-bold text-slate-500 cursor-not-allowed"
               />
             </div>
 
