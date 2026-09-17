@@ -214,7 +214,8 @@ export default function Parameters() {
     setParametros(newParametros);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newParametros));
     // Notifica a la hoja de controles y otros componentes en tiempo real
-    window.dispatchEvent(new Event("laft_parametros_updated"));
+      window.dispatchEvent(new Event("laft_parametros_updated"));
+      window.dispatchEvent(new Event("laft_params_updated"));
   };
 
   const handleWeightChange = (id: number, newValorDecimal: number) => {
