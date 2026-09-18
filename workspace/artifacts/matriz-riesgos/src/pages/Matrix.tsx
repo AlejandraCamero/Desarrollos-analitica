@@ -1030,7 +1030,7 @@ export default function Matrix({
                       } else if (!esUltimo) {
                         actualizados[index] = nuevo;
                       }
-                      setFormControlCodigos([...actualizados]);
+                      setFormData(prev => ({ ...prev, controlCodigos: [...actualizados] }));
                     }}
                     className="w-full border border-slate-300 rounded-lg bg-white focus:ring-1 focus:ring-teal-600 focus:border-teal-600 text-xs p-2"
                   >
@@ -1051,7 +1051,7 @@ export default function Matrix({
                       type="button"
                       onClick={() => {
                         const actualizados = formControlCodigos.filter((_, i) => i !== index);
-                        setFormControlCodigos([...actualizados]);
+                        setFormData(prev => ({ ...prev, controlCodigos: [...actualizados] }));
                       }}
                       className="text-rose-500 hover:text-rose-700 font-bold text-sm px-2 py-1 rounded hover:bg-rose-50 transition-colors"
                       title="Eliminar control"
