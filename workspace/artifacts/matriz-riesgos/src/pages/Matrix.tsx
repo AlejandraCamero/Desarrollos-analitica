@@ -119,9 +119,9 @@ export function obtenerListasParametrosActualizadas(defaultsOverride?: {
   try {
     // 1. Claves compuestas
     const keysToTry = [
+      "laft_parametros_v2",
       "laft_parametros_v1",
       "laft_parametros",
-      "laft_parametros_v2",
       "laft_parametros_v3",
       "laft_config_parametros",
       "parametros_laft",
@@ -1012,45 +1012,48 @@ export default function Matrix({
 
           <div className="space-y-3 text-xs">
             {[...formControlCodigos, ""].map((codigoSeleccionado, index) => {
-              const disponibles = controles.filter(c => 
-                !formControlCodigos.includes(c.codigo) || c.codigo === codigoSeleccionado
+              const esUltimo = index === formControlCodigos.length;
+              const disponibles = controles.filter(c =>
+                c.codigo === codigoSeleccionado || !formControlCodigos.includes(c.codigo)
               );
               return (
-                <div key={index} className="flex items-center gap-2">
+                <div key={`ctrl-slot-${index}`} className="flex items-center gap-2">
                   <select
                     value={codigoSeleccionado}
                     onChange={(e) => {
                       const nuevo = e.target.value;
                       const actualizados = [...formControlCodigos];
-                      if (nuevo === "") {
-                        actualizados.splice(index, 1);
-                      } else if (index < actualizados.length) {
-                        actualizados[index] = nuevo;
-                      } else {
+                      if (esUltimo && nuevo !== "") {
                         actualizados.push(nuevo);
+                      } else if (!esUltimo && nuevo === "") {
+                        actualizados.splice(index, 1);
+                      } else if (!esUltimo) {
+                        actualizados[index] = nuevo;
                       }
-                      setFormControlCodigos(actualizados);
+                      setFormControlCodigos([...actualizados]);
                     }}
                     className="w-full border border-slate-300 rounded-lg bg-white focus:ring-1 focus:ring-teal-600 focus:border-teal-600 text-xs p-2"
                   >
-                    <option value="">-- {index === 0 ? "Seleccione un control" : "Agregar otro control"} --</option>
+                    <option value="">
+                      -- {esUltimo ? (formControlCodigos.length === 0 ? "Seleccione un control" : "Agregar otro control") : "Seleccione un control"} --
+                    </option>
                     {disponibles.map((ctrl) => {
                       const pond = calcularPonderacion(ctrl.clase, ctrl.tipo, ctrl.frecuencia, ctrl.formalidad);
                       return (
-                        <option key={ctrl.id || ctrl.codigo} value={ctrl.codigo}>
+                        <option key={ctrl.codigo} value={ctrl.codigo}>
                           {ctrl.codigo} - {ctrl.control} | Eficiencia: {pond}%
                         </option>
                       );
                     })}
                   </select>
-                  {codigoSeleccionado && (
+                  {!esUltimo && (
                     <button
                       type="button"
                       onClick={() => {
                         const actualizados = formControlCodigos.filter((_, i) => i !== index);
-                        setFormControlCodigos(actualizados);
+                        setFormControlCodigos([...actualizados]);
                       }}
-                      className="text-rose-500 hover:text-rose-700 font-bold text-sm px-1"
+                      className="text-rose-500 hover:text-rose-700 font-bold text-sm px-2 py-1 rounded hover:bg-rose-50 transition-colors"
                       title="Eliminar control"
                     >
                       ✕
